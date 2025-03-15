@@ -11,6 +11,11 @@ if (!fs.existsSync(TEMP_DIR)) {
   fs.mkdirSync(TEMP_DIR, { recursive: true });
 }
 
+// WARNING: On Vercel, the filesystem is ephemeral and not shared between function invocations.
+// This means chunks saved in one request won't be available in another request.
+// For production use with large files, implement an external storage solution (S3, etc.)
+console.warn('WARNING: Using local filesystem for chunk storage. This will not work reliably on Vercel for large files.');
+
 // New way to configure route options in Next.js App Router
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30; // 30 seconds is enough for chunk uploads

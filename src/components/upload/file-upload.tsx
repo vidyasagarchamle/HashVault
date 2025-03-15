@@ -76,6 +76,15 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(event.target.files || []);
     if (selectedFiles.length > 0) {
+      // Check for large files and warn the user
+      const largeFiles = selectedFiles.filter(file => file.size > 25 * 1024 * 1024);
+      if (largeFiles.length > 0) {
+        toast.warning(
+          `Some files exceed the recommended size limit (25MB) for reliable uploads. Large files may fail to upload on this deployment.`,
+          { duration: 6000 }
+        );
+      }
+      
       const newFiles: UploadingFile[] = selectedFiles.map(file => ({
         file,
         progress: 0,

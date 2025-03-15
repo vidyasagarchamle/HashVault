@@ -162,6 +162,12 @@ export class WebHashClient {
         walletAddress
       });
 
+      // Check file size and warn about limitations on Vercel
+      const fileSizeMB = file.size / (1024 * 1024);
+      if (fileSizeMB > 25) {
+        console.warn(`File size (${fileSizeMB.toFixed(2)}MB) exceeds recommended limit for Vercel deployments. Consider using direct upload to WebHash or implementing external storage for chunks.`);
+      }
+
       // For small files (< 10MB), use direct upload
       if (file.size < 10 * 1024 * 1024) {
         return this.directUpload(file, walletAddress, onProgress);
